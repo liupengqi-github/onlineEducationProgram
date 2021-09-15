@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="body advert">
+        <!-- 面包屑 -->
+        <ol class="breadcrumb">
+            <li><a href="javascript:;">广告管理</a></li>
+            <li class="active">广告列表</li>
+        </ol>
+        <div class="page-title">
+            <a href="/advert/add" class="btn btn-success btn-sm pull-right">添加广告</a>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form action="" class="form-inline">
+                    <select name="" class="form-control input-sm">
+                        <option value="">按年龄</option>
+                    </select>
+                    <select name="" class="form-control input-sm">
+                        <option value="">按性别</option>
+                    </select>
+                    <select name="" class="form-control input-sm">
+                        <option value="">按地区</option>
+                    </select>
+                    <select name="" class="form-control input-sm">
+                        <option value="">按日期</option>
+                    </select>
+                    <button class="btn btn-success btn-sm">筛选</button>
+                </form>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <td>序号</td>
+                    <th>标题</th>
+                    <th>图片</th>
+                    <th>链接</th>
+                    <th>开始时间</th>
+                    <th>结束时间</th>
+                    <th>点击次数</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in adverts %}
+                <tr>
+                    <td>0</td>
+                    <td>{{item.tile}}</td>
+                    <td>
+                        <img src="/public/uploads/{{item.image}}" style="width: 100px;" alt="">
+                    </td>
+                    <td>{{item.link}}</td>
+                    <td>{{item.start_time}}</td>
+                    <td>{{item.end_time}}</td>
+                    <td>1</td>
+                    <td>
+                        <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>
+                        <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!--
+            分页加载问题：
+                同步刷新加载分页 （如果是同步记载的，那就是希望被搜索引擎检索到，因为搜索的时候有利于爬虫抓取）
+                异步无刷新加载分页（异步加载的数据爬虫是很难爬到的，所以这点就是在做 SEO 优化）
+            分页的目的：
+                1. 提高用户体验
+                2. 减少服务器压力
+         -->
+        <ul class="pagination pull-right">
+            <li><a href="/advert/?page={{ page - 1 }}">上一页</a></li>
+            {% for i in range(0, totalPage) -%}
+                {% if (i + 1) === page %}
+                    <li class="active"><a href="/advert?page={{ i + 1 }}">{{ i + 1 }}</a></li>
+                {% else %}}
+                    <li><a href="/advert?page={{ i + 1 }}">{{ i + 1 }}</a></li>
+                {% endif %}
+            {%- endfor %}
+            <li><a href="/advert/?page={{ page + 1 }}">下一页</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

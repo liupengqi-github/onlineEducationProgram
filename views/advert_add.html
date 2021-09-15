@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="body advert">
+        <!-- 面包屑 -->
+        <ol class="breadcrumb">
+            <li><a href="javascript:;">广告管理</a></li>
+            <li class="active">添加广告</li>
+        </ol>
+        <div class="advert-add">
+            <form action="/advert/add" method="post" class="form-horizontal" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">标题</label>
+                    <div class="col-md-5">
+                        <input type="text" required class="form-control input-sm" name="title" placeholder="填写广告标题">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">图片</label>
+                    <div class="col-md-5">
+                        <input type="file" required class="form-control input-sm" name="image" id="file" placeholder="填写广告图片">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">链接</label>
+                    <div class="col-md-5">
+                        <input type="text" required class="form-control input-sm" name="link"  placeholder="填写广告链接">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">开始时间</label>
+                    <div class="col-md-5">
+                        <input type="text" required class="form-control input-sm" name="start_time" placeholder="填写开始时间">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-md-3 control-label">结束时间</label>
+                    <div class="col-md-5">
+                        <input type="text" required class="form-control input-sm" name="end_time" placeholder="填写结束时间">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-8">
+                        <input type="submit" class="btn btn-success btn-sm pull-right" value="保存">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+  // formData：XMLHTTPRequest 2（也就是 html5 里面新增的一个 API），它支持用代码的形式构造一个具有文件的一个表单（其实除了用 form 标签生成的表单，代码也可以生成表单）
+
+
+    // XMLHTTPRequest 1
+    // XMLHTTPRequest 2：（HTML5 增加的）相比 1 中，增加了对 表单文件的支持
+    // 对表单进行了异步提交，页面就不会被服务端响应的数据重新渲染了
+    $('form').on('submit', function(e) {
+      // 这是老方法使用 XMLHttpRequest 结合 formData 来做的文件上传的表单
+      // var formData = new FormData()
+      // formData.append('name', 'Jack')
+      // formData.append('age', '18')
+      // formData.append('file', document.getElementById('file').files[0])
+      //
+      // // 发送 XMLHTTPRequest 请求
+      // var xhr = new XMLHttpRequest()
+      // // 设置请求头
+      // // xhr.setRequestHeader()
+      //
+      // // xhr.open 第一个参数指定请求方法，第二个参数指定请求路径
+      // xhr.open('post', '/advert/add')
+      // xhr.send(formData)
+
+      // 这是我们使用 ajax 来做的文件上传的表单
+      // 请求接口
+      $.ajax({
+        url: $(this).attr('action'),
+        type: $(this).attr('method'),
+        // 表单数据序列化
+        // data: $(this).serialize(),
+        // 文件上传转换成用 formData 上传的
+        data: new FormData($(this)[0]),
+        // 当你的 data 选项被提交为一个 FormData 对象的时候，一定要将 processData 配置为 false，设置为 false 就是不对 data 中的数据做处理
+        // 否则 jquery 的异步提交不生效
+        processData: false,
+        // 当提交一个 FormData 对象的时候，记得要将 contentType 设置为 false
+        // 否则 jQuery 会默认把 Content-Type 设置为：application/x-www-form-urlencoded; charset=UTF-8
+        contentType: false,
+        success: function(data) {
+          console.log(data)
+          if (data.err_code == 0) {
+            // 添加成功，跳转到列表页
+            window.location.href = '/advert'
+          }
+        }
+      })
+
+      // 阻止表单默认提交行为
+      return false
+    })
+</script>
+{% endblock %}
+
